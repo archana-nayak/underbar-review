@@ -469,10 +469,10 @@
         var orderTraversed = [];
 
         _.reduce([1, 2, 3, 4], function(memo, item) {
+          orderTraversed.push(item);
           // FILL_ME_IN
           // Add a line here that makes this test pass
           // for a working implementation of reduce
-          return memo;
         }, 10);
 
         expect(orderTraversed).to.eql([1, 2, 3, 4]);
@@ -501,7 +501,7 @@
         expect(result).to.equal(4);
       });
 
-      it('Fill me in with a description of the behavior this test is checking for', function() {
+      it('it should pass the value of memo from previous result of iterator call', function() {
         var result = _.reduce([1, 2, 3], function(memo, item) {
           return memo * item;
         }, 0);
