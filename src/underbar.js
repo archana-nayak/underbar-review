@@ -172,13 +172,21 @@
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
     var index = 0;
-    if (!accumulator) {
+    // console.dir("accumulator " + accumulator);
+    if (accumulator === undefined) {
       accumulator = collection[0];
       index = 1;  
     }
-    _.each(collection,function(accumulator,element) {
-      accumulator = iterator(accumulator, element);
-    });
+    if (Array.isArray(collection)) {
+      for (;index < collection.length;index++) {
+        accumulator = iterator(accumulator,collection[index]);
+      }
+    } else if (collection.constructor === Object) {
+      var keys = Object.keys(collection);
+      for ( ; index < keys.length;index++) {
+        accumulator = iterator(accumulator, collection[keys[index]]);
+      }
+    }
     return accumulator;
   };
 
@@ -198,12 +206,18 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    return _.reduce(collection, function(allClearTest, element) {
+      return iterator ? allClearTest && Boolean(iterator(element)) : Boolean(element);
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    return !_.every(collection, function(element) {
+      return iterator ? !iterator(element) : !element;
+    });
   };
 
 
@@ -226,6 +240,7 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    
   };
 
   // Like extend, but doesn't ever overwrite a key that already
