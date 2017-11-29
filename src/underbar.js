@@ -240,12 +240,28 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
-    
+    var args = Array.prototype.slice.call(arguments,1);
+    console.dir("args: " + JSON.stringify(args));
+    return _.reduce(args,function(destination, appendObj) {
+      for (var key in appendObj) {
+        destination[key] = appendObj[key];
+      }
+      return destination;
+    }, obj);
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var args = Array.prototype.slice.call(arguments,1);
+    return _.reduce(args, function(destination, appendObj) {
+      for (var key in appendObj) {
+        if (!(destination.hasOwnProperty(key))) {
+          destination[key] = appendObj[key];
+        }
+      }
+      return destination;
+    }, obj);
   };
 
 
@@ -298,6 +314,12 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = Array.prototype.slice.call(arguments,2);
+    console.dir("args ");
+    console.dir(args);
+    setTimeout(function () {
+      func.apply(null, args);
+    }, wait);
   };
 
 
