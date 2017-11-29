@@ -172,7 +172,6 @@
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
     var index = 0;
-    // console.dir("accumulator " + accumulator);
     if (accumulator === undefined) {
       accumulator = collection[0];
       index = 1;  
@@ -241,7 +240,6 @@
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
     var args = Array.prototype.slice.call(arguments,1);
-    console.dir("args: " + JSON.stringify(args));
     return _.reduce(args,function(destination, appendObj) {
       for (var key in appendObj) {
         destination[key] = appendObj[key];
@@ -305,6 +303,18 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var result = {};
+    return function() {
+      var args = Array.prototype.slice.call(arguments);
+      var argsString = JSON.stringify(args);
+      console.dir('argsString ' + argsString);
+      var computed = result[argsString];
+      if (computed === undefined) {
+        computed = func.apply(null,args);
+        result[argsString] = computed;
+      }
+      return computed;
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -315,8 +325,6 @@
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
     var args = Array.prototype.slice.call(arguments,2);
-    console.dir("args ");
-    console.dir(args);
     setTimeout(function () {
       func.apply(null, args);
     }, wait);
