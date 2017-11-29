@@ -100,7 +100,7 @@
   _.uniq = function(array, isSorted, iterator) {
     var result = [];
     if (!isSorted) {
-      _.filter(array,function(element){
+      _.each(array, function(element){
         if (!result.includes(element)) {
           result.push(element);
         }
